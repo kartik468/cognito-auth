@@ -19,9 +19,16 @@
             controller: 'signupController'
         };
 
-        $stateProvider.state(signupState);
+        var profileState = {
+            name: 'profile',
+            url: '/profile',
+            templateUrl: 'templates/profile.html',
+            controller: 'profileController'
+        };
 
+        $stateProvider.state(signupState);
         $stateProvider.state(signinState);
+        $stateProvider.state(profileState);
     });
 
     window.AuthData = {

@@ -1,4 +1,6 @@
-(function(angular, myApp) {
+(function(angular) {
+  'use strict';
+  var myApp = angular.module('AWS_POC');
     myApp.directive('signin', function() {
         return {
             restrict: 'E',
@@ -7,4 +9,4 @@
             controller: 'signinController'
         };
     });
-})(window.angular, window.myApp);
+})(window.angular);
