@@ -77,7 +77,7 @@
 
         cognitoUser.authenticateUser(authenticationDetails, {
             onSuccess: function(result) {
-                $window.sessionStorage.setItem('authJWTToken', result.getAccessToken().getJwtToken());
+                $window.sessionStorage.setItem('accessJWTToken', result.getAccessToken().getJwtToken());
                 deferred.resolve(result);
             },
             onFailure: function(err) {
@@ -102,40 +102,49 @@
       };
 
       this.getS3BucketList = function() {
-        var authToken = $window.sessionStorage.getItem('authJWTToken');
-        if(!authToken) {
+        var accessJWTToken = $window.sessionStorage.getItem('accessJWTToken');
+        if(!accessJWTToken) {
           console.error('Invalid token');
           return
         }
-        var CognitoUserPool = AmazonCognitoIdentity.CognitoUserPool;
-        var poolData = {
-            UserPoolId: AuthData.AWS.UserPoolId,
-            ClientId: AuthData.AWS.ClientId
-        };
-        var userPool = new AWSCognito.CognitoIdentityServiceProvider.CognitoUserPool(poolData);
-
-        //POTENTIAL: Region needs to be set if not already set previously elsewhere.
-        AWS.config.region = AuthData.AWS.Region;
-
-        AWS.config.credentials = new AWS.CognitoIdentityCredentials({
-            IdentityPoolId: 'AuthData.AWS.UserPoolId', // your identity pool id here
-            Logins: {
-                // Change the key below according to the specific region your user pool is in.
-                ['cognito-idp.' + AuthData.AWS.Region + '.amazonaws.com/' + AuthData.AWS.UserPoolId]: authToken
-            }
-        });
-
         var cognitoUser = userPool.getCurrentUser();
-        // Instantiate aws sdk service objects now that the credentials have been updated.
-        var s3 = new AWS.S3();
-        var params = {};
-        s3.listBuckets(params, function(err, data){
-          if(err) {
-            console.error(err);
-            return;
-          }
-          console.log(data);
-        });
+
+        if (cognitoUser != null) {
+          cognitoUser.getSession(function(err, session) {
+            if (err) {
+               alert(err);
+                return;
+            }
+
+             console.log('session validity: ' + session.isValid());
+
+            //POTENTIAL: Region needs to be set if not already set previously elsewhere.
+            AWS.config.region = AuthData.AWS.Region;
+
+            // Add the User's Id Token to the Cognito credentials login map.
+            AWS.config.credentials = new AWS.CognitoIdentityCredentials({
+                IdentityPoolId: AuthData.AWS.IdentityPoolId, // 'YOUR_IDENTITY_POOL_ID',
+                Logins: {
+                    // 'cognito-idp.<region>.amazonaws.com/<YOUR_USER_POOL_ID>': session.getIdToken().getJwtToken()
+                    ['cognito-idp.' + AuthData.AWS.Region + '.amazonaws.com/' + AuthData.AWS.UserPoolId]: session.getIdToken().getJwtToken()
+                }
+            });
+
+            AWS.config.credentials.refresh(function(){
+               // Your S3 code here...
+               // Instantiate aws sdk service objects now that the credentials have been updated.
+               var s3 = new AWS.S3();
+               var params = {};
+               s3.listBuckets(params, function(err, data) {
+                 if(err) {
+                   console.error(err);
+                   return;
+                 }
+                 console.log(data);
+               });
+            });
+          });
+        }
       }
 
     }]);
