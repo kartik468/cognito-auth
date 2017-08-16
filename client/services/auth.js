@@ -115,7 +115,7 @@
         var userPool = new AWSCognito.CognitoIdentityServiceProvider.CognitoUserPool(poolData);
 
         //POTENTIAL: Region needs to be set if not already set previously elsewhere.
-        AWS.config.region = AuthData.AWS.region;
+        AWS.config.region = AuthData.AWS.Region;
 
         AWS.config.credentials = new AWS.CognitoIdentityCredentials({
             IdentityPoolId: 'AuthData.AWS.UserPoolId', // your identity pool id here
