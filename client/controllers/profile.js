@@ -8,12 +8,19 @@
           console.log('logout: ' + result);
           // $state.go("signin");
         }, function(err) {
-          console.error('Failed: ' + err);
+          console.error('Failed: ' + err.data.message);
         });
       };
 
-      $scope.listS3BucketsList = function() {
-        authService.getS3BucketList();
+      $scope.listS3Buckets = function() {
+        var resultPromise = authService.listS3Buckets();
+        resultPromise.then(function(result) {
+          console.log('SUCCESS');
+          console.log(result);
+          // $state.go("signin");
+        }, function(err) {
+          console.error('Failed: ' + err.data.message);
+        });
       }
   }]);
 })(window.angular);

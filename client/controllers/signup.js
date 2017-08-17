@@ -20,18 +20,19 @@
 
         var resultPromise = authService.signupToCognito(userData);
         resultPromise.then(function(result) {
+          console.log('signup success');
           $scope.confirmRegistrationForm = true;
         }, function(err) {
-          console.error('Failed: ' + err);
+          console.error('Failed: ' + err.data.message);
         });
       };
 
       $scope.confirmRegistration = function() {
-          var resultPromise = authService.confirmCognitoRegistration($scope.username, $scope.code);
+          var resultPromise = authService.confirmCognitoRegistration($scope.code);
           resultPromise.then(function(result) {
             $state.go("signin");
           }, function(err) {
-            console.error('Failed: ' + err);
+            console.error('Failed: ' + err.data.message);
           });
       }
 

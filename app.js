@@ -8,7 +8,7 @@ var expressSession = require('express-session');
 var cors = require('cors')
 
 var index = require('./routes/index');
-var users = require('./routes/users');
+var cognitoRoutes = require('./routes/cognito');
 
 
 var app = express();
@@ -36,7 +36,7 @@ app.use(expressSession({secret: 'mysecret', resave: false, saveUninitialized: fa
 app.use(express.static(path.join(__dirname, 'client')));
 
 app.use('/', index);
-app.use('/users', users);
+app.use('/cognito', cognitoRoutes);
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {
