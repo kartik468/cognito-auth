@@ -12,7 +12,7 @@
             console.log('Successfully logged in');
             $state.go("profile");
           }, function(err) {
-            console.error('Failed: ' + err.data.message);
+            console.error('Failed: ' + (err.data.message || err.data));
           });
       }
   }]);

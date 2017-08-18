@@ -23,7 +23,7 @@
           console.log('signup success');
           $scope.confirmRegistrationForm = true;
         }, function(err) {
-          console.error('Failed: ' + err.data.message);
+          console.error('Failed: ' + (err.data.message || err.data));
         });
       };
 
@@ -32,7 +32,7 @@
           resultPromise.then(function(result) {
             $state.go("signin");
           }, function(err) {
-            console.error('Failed: ' + err.data.message);
+            console.error('Failed: ' + (err.data.message || err.data));
           });
       }
 

@@ -8,7 +8,7 @@
           console.log('logout: ' + result);
           // $state.go("signin");
         }, function(err) {
-          console.error('Failed: ' + err.data.message);
+          console.error('Failed: ' + (err.data.message || err.data));
         });
       };
 
@@ -19,7 +19,7 @@
           console.log(result);
           // $state.go("signin");
         }, function(err) {
-          console.error('Failed: ' + err.data.message);
+          console.error('Failed: ' + (err.data.message || err.data));
         });
       }
   }]);
