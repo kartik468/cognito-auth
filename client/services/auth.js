@@ -62,18 +62,66 @@
       this.signoutFromCognito = function() {
         var deferred = $q.defer();
 
-        return deferred.promise;
-      };
-
-      this.listS3Buckets = function() {
-        var deferred = $q.defer();
-        
         var req = {
            method: 'GET',
-           url: '/cognito/listS3Buckets'
+           url: '/cognito/signout'
         }
 
         $http(req).then(function(result){
+          deferred.resolve(result);
+        }, function(err){
+          deferred.reject(err);
+        });
+
+        return deferred.promise;
+      };
+
+      this.getS3Buckets = function() {
+        var deferred = $q.defer();
+
+        var req = {
+           method: 'GET',
+           url: '/cognito/buckets'
+        }
+
+        $http(req).then(function(result) {
+          deferred.resolve(result);
+        }, function(err){
+          deferred.reject(err);
+        });
+
+        return deferred.promise;
+      }
+
+      this.getS3BucketObjects = function(bucketName) {
+        var deferred = $q.defer();
+
+        var req = {
+           method: 'GET',
+           url: '/cognito/buckets/bucket/' + bucketName
+        }
+
+        $http(req).then(function(result) {
+          deferred.resolve(result);
+        }, function(err){
+          deferred.reject(err);
+        });
+
+        return deferred.promise;
+      }
+
+      this.downloadObject = function(bucketName, bucketObject) {
+        var deferred = $q.defer();
+
+        var req = {
+           method: 'GET',
+           headers: {
+             'Content-Type': undefined
+           },
+           url: '/cognito/buckets/bucket/' + bucketName + '/' + bucketObject.Key
+        }
+
+        $http(req).then(function(result) {
           deferred.resolve(result);
         }, function(err){
           deferred.reject(err);
