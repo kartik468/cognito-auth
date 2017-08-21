@@ -276,9 +276,9 @@ router.get('/buckets/bucket/:bucketName/:objectKey', function(req, res, next) {
             if (err) {
                res.status(400).send('err'); // an error occurred
             }
-            res.attachment(objectKey);
-            res.send(data.Body);
-            // res.send(data);           // successful response
+            // res.attachment(objectKey);
+            // res.send(data.Body);
+            res.send(data);           // successful response
           });
         });
       }

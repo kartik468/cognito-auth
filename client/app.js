@@ -33,9 +33,24 @@
             controller: 'bucketController'
         };
 
+        var fileDisplayState = {
+            name: 'displayImage',
+            url: '/s3Buckets/s3Bucket/:bucketName/:fileName',
+            templateUrl: 'templates/display-image.html',
+            controller: 'displayImageController'
+            // ,
+            // resolve: {
+            //     translations: "authService",
+            //     getFileData: function(translations, $stateParams) {
+            //       return translations.downloadObject($stateParams.bucketName, $stateParams.fileName);
+            //    }
+            // }
+        }
+
         $stateProvider.state(signupState);
         $stateProvider.state(signinState);
         $stateProvider.state(s3BucketsState);
         $stateProvider.state(s3BucketState);
+        $stateProvider.state(fileDisplayState);
     });
 })(window.angular);

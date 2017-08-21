@@ -110,15 +110,15 @@
         return deferred.promise;
       }
 
-      this.downloadObject = function(bucketName, bucketObject) {
+      this.downloadObject = function(bucketName, Key) {
         var deferred = $q.defer();
 
         var req = {
            method: 'GET',
-           headers: {
-             'Content-Type': undefined
-           },
-           url: '/cognito/buckets/bucket/' + bucketName + '/' + bucketObject.Key
+          //  headers: {
+          //    'Content-Type': undefined
+          //  },
+           url: '/cognito/buckets/bucket/' + bucketName + '/' + Key
         }
 
         $http(req).then(function(result) {
